@@ -83,35 +83,56 @@ Note: Keep all the switch faults in off position
 
 ## PROGRAM:
 ```
-clc;
-clear;
-close;
-am = 2.6+0.1*59;           
-fm = 213+0.1*59;           
-fs = 2130*10;         
-t = 0:1/fs:2/fm;    
-m = am * cos(2*%pi*fm*t);
-ac = 10;             
-fc = 10*fm;         
-c = ac * cos(2*%pi*fc*t);
-u = (ac + m) .* cos(2*%pi*fc*t);
-envelope = abs(hilbert(u));  
-clf();
-subplot(4,1,1);
-plot(t, m);
-xtitle("Message Signal", "Time (s)", "Amplitude");
+	am = 8.5;
+	fm = 218.9;
+	fs = 21300;
+	pi = %pi;
+	t = 0:1/fs:2/fm;
+	m = am * cos(2 * pi * fm * t);
+	ac = 17;
+	fc = 2189;
+	c = cos(2 * pi * fc * t);
+	modulated = (ac + m) .* c;
+	
+	demod_raw = modulated .* c;
+	N = length(demod_raw);
+	M = fft(demod_raw);
+	f = (0:N-1)*(fs/N);
+	
+	cutoff = 2 * fm;
+	H = (f < cutoff);
+	M_filtered = M .* H;
+	demodulated = real(ifft(M_filtered));
+	
+	avg = sum(demodulated) / length(demodulated);
+	demodulated = demodulated - avg;
+	demodulated = demodulated / max(abs(demodulated));
+	demodulated = demodulated * max(abs(m));
+	
+	subplot(4,1,1);
+	plot(t, m);
+	title('Message Signal');
+	xlabel('Time (s)');
+	ylabel('Amplitude');
+	
+	subplot(4,1,2);
+	plot(t, c);
+	title('Carrier Signal');
+	xlabel('Time (s)');
+	ylabel('Amplitude');
+	
+	subplot(4,1,3);
+	plot(t, modulated);
+	title('AM Modulated Signal');
+	xlabel('Time (s)');
+	ylabel('Amplitude');
+	
+	subplot(4,1,4);
+	plot(t, demodulated);
+	title('Demodulated Signal');
+	xlabel('Time (s)');
+	ylabel('Amplitude');
 
-subplot(4,1,2);
-plot(t, c);
-xtitle("Carrier Signal", "Time (s)", "Amplitude");
-
-subplot(4,1,3);
-plot(t, u);
-xtitle("AM Modulated Signal", "Time (s)", "Amplitude");
-
-subplot(4,1,4);
-plot(t, envelope);
-xtitle("Demodulated Signal", "Time (s)", "Amplitude");
 ```
  
 ## TABULATION:
@@ -125,7 +146,8 @@ xtitle("Demodulated Signal", "Time (s)", "Amplitude");
 
 
 ## OUTPUT:
-<img width="756" height="680" alt="image" src="https://github.com/user-attachments/assets/635b8aec-55aa-4102-bf6f-d14131cf26e7" />
+<img width="728" height="592" alt="image" src="https://github.com/user-attachments/assets/e8c9dac5-04f9-46f4-88f4-ce933e04fc9e" />
+
 
 
 ## RESULT:
