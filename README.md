@@ -1,11 +1,10 @@
 # GENERATION-AND-DETECTION-OF-AM_1
 ## AIM:
-To generate and detect the amplitude modulation and demodulation u s i n g S C I L A B and to calculate modulation index of AM.
+To generate and detect the amplitude modulation and demodulation using scilab and to calculate modulation index of AM.
 
 ## EQUIPMENTS REQUIRED
 
 •	Computer with i3 Processor
-
 •	SCI LAB
 
 ## THEORY:
@@ -83,13 +82,51 @@ Note: Keep all the switch faults in off position
 <img width="600" height="800" alt="image" src="https://github.com/user-attachments/assets/7bc77926-9c2a-42c6-994b-6c67433b11d2" />
 
 ## PROGRAM:
+```
+clc;
+clear;
+close;
+am = 2.6+0.1*59;           
+fm = 213+0.1*59;           
+fs = 2130*10;         
+t = 0:1/fs:2/fm;    
+m = am * cos(2*%pi*fm*t);
+ac = 10;             
+fc = 10*fm;         
+c = ac * cos(2*%pi*fc*t);
+u = (ac + m) .* cos(2*%pi*fc*t);
+envelope = abs(hilbert(u));  
+clf();
+subplot(4,1,1);
+plot(t, m);
+xtitle("Message Signal", "Time (s)", "Amplitude");
+
+subplot(4,1,2);
+plot(t, c);
+xtitle("Carrier Signal", "Time (s)", "Amplitude");
+
+subplot(4,1,3);
+plot(t, u);
+xtitle("AM Modulated Signal", "Time (s)", "Amplitude");
+
+subplot(4,1,4);
+plot(t, envelope);
+xtitle("Demodulated Signal", "Time (s)", "Amplitude");
+```
  
 ## TABULATION:
+<img width="740" height="629" alt="image" src="https://github.com/user-attachments/assets/cc38bb1f-3223-4908-84ed-b5acecbeb25a" />
+
 
 ## CALCULATION:
+<img width="668" height="359" alt="image" src="https://github.com/user-attachments/assets/67a85824-72b4-4b4a-8835-63445da88396" />
+
 
 
 
 ## OUTPUT:
+<img width="756" height="680" alt="image" src="https://github.com/user-attachments/assets/635b8aec-55aa-4102-bf6f-d14131cf26e7" />
+
 
 ## RESULT:
+Thus the amplitude modulation and demodulation is experimentally done and the output is verified.
